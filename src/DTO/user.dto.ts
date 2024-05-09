@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsDefined, MinLength, Matches } from 'class-validator';
+import { IsNotEmpty, IsString, IsDefined, MinLength, Matches, MaxLength } from 'class-validator';
 
 export class UserDTO {
   @IsDefined()
@@ -14,7 +14,7 @@ export class UserDTO {
   @IsDefined()
   @IsNotEmpty()
   @IsString()
-  @MinLength(8, {message: "A senha deve ter no mínimo 8 caracteres"})
-  @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[_.#@])^/, {message: 'A senha deve conter pelo menos uma letra maiúscula, um número e um caractere especial.'})
+  @MinLength(8, {message: 'password must have at least 8 characters'})
+  @MaxLength(12)
   readonly password: string;
 }

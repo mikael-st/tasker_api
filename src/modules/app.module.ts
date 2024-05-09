@@ -6,7 +6,6 @@ import { DATABASE_URI } from 'src/config/env.config';
 import { UserController } from 'src/controller/user.controller';
 import { UserSevice } from 'src/services/user.service';
 import { UserSchema } from 'src/config/database/models/user.model';
-import { MongooseService } from 'src/config/mongoose.service';
 
 @Module({
   imports: [
@@ -20,6 +19,6 @@ import { MongooseService } from 'src/config/mongoose.service';
     ])
   ],
   controllers: [AppController, UserController],
-  providers: [AppService, UserSevice, MongooseService],
+  providers: [AppService, UserSevice],
 })
 export class AppModule {}

@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsString, IsDefined, MinLength, Matches } from 'class-validator';
 
-export class User {
+export class UserDTO {
   @IsDefined()
   @IsNotEmpty()
   @IsString()

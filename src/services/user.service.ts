@@ -13,12 +13,10 @@ export class UserSevice {
 
   async userExists(data: UserDTO) {
     const { username } = data;
-    console.log(username);
     
     const exists = await this.Model.findOne({
       username: username
     });
-    console.log(exists);
       
     if (exists) {
       throw new UserExistsException()

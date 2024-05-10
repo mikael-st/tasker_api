@@ -13,7 +13,6 @@ export class ValidateUser extends ValidatePassword implements NestInterceptor {
     const request = context.switchToHttp().getRequest();
 
     const body: UserDTO = request.body;
-    console.log(body);
     
     this.validate(body);
 
@@ -31,20 +30,21 @@ export class ValidateUser extends ValidatePassword implements NestInterceptor {
   }
 
   haveName(data: UserDTO) {
-    this.validName(data);
-    if (isEmpty(data.name) && !isDefined(data.name)) {
+    this.validValue(data);
+    if (isEmpty(data.name)) {
       throw new UserUnnamedException();
     }
   }
 
-  validName(data: UserDTO) {
+  validValue(data: UserDTO) {
     if (!isString(data.name)) {
-      throw new InvalidNameException('name field from user must be a string')
+      throw new InvalidNameException('name/username field from user must be a string')
     }
   }
 
   haveUsername(data: UserDTO) {
-    if (!data.username && !isString(data.username) && !isNotEmpty(data.username) && !isDefined(data.name)) {
+    this.validValue(data);
+    if (isEmpty(data.username)) {
       throw new WithoutUsernameException();
     }
   }

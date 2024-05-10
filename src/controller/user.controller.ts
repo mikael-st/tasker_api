@@ -1,8 +1,6 @@
 import { Body, Controller, Delete, Get, Post, UseInterceptors } from "@nestjs/common";
-import { response } from "express";
 import { UserDTO } from "src/DTO/user.dto";
 import { UserSevice } from "src/services/user.service";
-import { HttpExceptionFilter } from "src/utils/exception.filter";
 import { ValidateUser } from "src/utils/filters/validate_user.filter";
 
 @Controller('user')

@@ -16,7 +16,7 @@ import { UserSchema } from 'src/config/database/models/user.model';
     }),
     MongooseModule.forFeature([
       { name: 'user', schema: UserSchema }
-    ])
+    ]),
   ],
   controllers: [AppController, UserController],
   providers: [AppService, UserSevice],

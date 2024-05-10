@@ -17,7 +17,7 @@ export class UserController {
   async create(
     @Body() value: UserDTO
   ) {
-    // await this.service.create(value);
+    await this.service.create(value);
   }
 
   // @Delete()

@@ -8,7 +8,10 @@ export class UserController {
   constructor(private readonly service: UserSevice) {}
 
   @Post('/login')
-  login() {}
+  @UseInterceptors()
+  async login(
+    @Body() values: {username: string, password: string}
+  ) {}
 
   @Post()
   @UseInterceptors(new ValidateUser())
@@ -33,7 +36,7 @@ export class UserController {
     await this.service.updateName({
       user: user,
       name: value.name
-    })
+    });
   }
 
 }

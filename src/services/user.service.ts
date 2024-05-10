@@ -21,6 +21,20 @@ export class UserSevice {
     }
   }
 
+  async findByUsername(username: string): Promise<UserDTO> {
+    try {
+      const user = await this.Model.findOne({
+        username
+      });
+      if (user) {
+        throw new UserNotExistsException();
+      }
+      return user;
+    } catch (err) {
+      throw new BadRequestException(err);
+    }
+  }
+
   async create(data: UserDTO) {
     await this.userExists(data.username);
     const user = new this.Model(data);
@@ -28,17 +42,6 @@ export class UserSevice {
       await user.save()
     } catch (err) {
       throw new BadRequestException(err);
-    }
-  }
-
-  async findByUsername(username: string): Promise<UserDTO> {
-    try {
-      const user = await this.Model.findOne({
-        username
-      });
-      return user;
-    } catch (error) {
-      throw new UserNotExistsException();
     }
   }
 

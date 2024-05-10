@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Post, UseInterceptors } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Patch, Post, UseInterceptors } from "@nestjs/common";
 import { UserDTO } from "src/DTO/user.dto";
 import { UserSevice } from "src/services/user.service";
 import { ValidateUser } from "src/utils/filters/validate_user.filter";
@@ -7,8 +7,8 @@ import { ValidateUser } from "src/utils/filters/validate_user.filter";
 export class UserController {
   constructor(private readonly service: UserSevice) {}
 
-  @Get()
-  getUsers() {}
+  @Post('/login')
+  login() {}
 
   @Post()
   @UseInterceptors(new ValidateUser())
@@ -18,10 +18,22 @@ export class UserController {
     await this.service.create(value);
   }
 
-  // @Delete()
-  // async delete(
-  //   @Body() value: UserDTO
-  // ) {
-  // }
+  @Delete()
+  async delete(
+    @Body() value: { username: string }
+  ) {
+    await this.service.delete(value.username);
+  }
+
+  @Patch(':id')
+  async updateName(
+    @Body() value: { name: string },
+    @Param('id') user: string
+  ) {
+    await this.service.updateName({
+      user: user,
+      name: value.name
+    })
+  }
 
 }

@@ -1,5 +1,5 @@
 import { UserDTO } from "src/DTO/user.dto";
-import { InvalidPasswordException } from "./errors/invalid_password.exception";
+import { InvalidPasswordException } from "../errors/invalid_password.exception";
 import { maxLength, minLength } from "class-validator";
 
 export abstract class ValidatePassword {

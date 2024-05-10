@@ -1,11 +1,8 @@
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from "@nestjs/common";
-import { isDefined, isNotEmpty, isString, isEmpty } from "class-validator";
 import { Observable, catchError } from 'rxjs';
 import { UserDTO } from "src/DTO/user.dto";
-import { UserUnnamedException } from "../errors/unnamed.exception";
-import { WithoutUsernameException } from "../errors/without_username.exception";
-import { ValidatePassword } from "../validate_password";
-import { InvalidNameException } from "../errors/invalid_name.exception";
+import { ValidatePassword } from "./validate_password";
+import { validateFields } from "../validation.utils";
 
 @Injectable()
 export class ValidateUser extends ValidatePassword implements NestInterceptor {
@@ -14,38 +11,12 @@ export class ValidateUser extends ValidatePassword implements NestInterceptor {
 
     const body: UserDTO = request.body;
     
-    this.validate(body);
+    validateFields(body);
 
     return next.handle().pipe(
       catchError((err) => {
         throw err;
       })
     );
-  }
-
-  validate(data: UserDTO){
-    this.haveName(data);
-    this.haveUsername(data);
-    this.validatePassword(data);
-  }
-
-  haveName(data: UserDTO) {
-    this.validValue(data);
-    if (isEmpty(data.name)) {
-      throw new UserUnnamedException();
-    }
-  }
-
-  validValue(data: UserDTO) {
-    if (!isString(data.name)) {
-      throw new InvalidNameException('name/username field from user must be a string')
-    }
-  }
-
-  haveUsername(data: UserDTO) {
-    this.validValue(data);
-    if (isEmpty(data.username)) {
-      throw new WithoutUsernameException();
-    }
   }
 }

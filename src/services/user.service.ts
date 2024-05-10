@@ -4,6 +4,8 @@ import { Model } from "mongoose";
 import { UserDTO } from "src/DTO/user.dto";
 import { IUser } from "src/config/database/models/user.model";
 import { UserExistsException } from "src/utils/errors/user_exists.error";
+import { UserNotExistsException } from "src/utils/errors/user_not_exists.exception";
+import { validateName } from "src/utils/validation.utils";
 
 @Injectable()
 export class UserSevice {
@@ -11,12 +13,8 @@ export class UserSevice {
     @InjectModel('user') private readonly Model: Model<IUser>
   ) {}
 
-  async userExists(data: UserDTO) {
-    const { username } = data;
-    
-    const exists = await this.Model.findOne({
-      username: username
-    });
+  async userExists(username: string) {    
+    const exists = await this.findByUsername(username);
       
     if (exists) {
       throw new UserExistsException()
@@ -24,7 +22,7 @@ export class UserSevice {
   }
 
   async create(data: UserDTO) {
-    await this.userExists(data);
+    await this.userExists(data.username);
     const user = new this.Model(data);
     try {
       await user.save()
@@ -33,15 +31,47 @@ export class UserSevice {
     }
   }
 
-  async getByUsername(username: string): Promise<UserDTO[]> {
-    return this.Model.find({
-      username
-    }).exec()
+  async findByUsername(username: string): Promise<UserDTO> {
+    try {
+      const user = await this.Model.findOne({
+        username
+      });
+      return user;
+    } catch (error) {
+      throw new UserNotExistsException();
+    }
   }
 
-  // async delete() {
-  //   await this.Model.deleteOne({
-  //     _id: id
-  //   })
+  async delete(data: string) {
+    await this.findByUsername(data);
+    try {
+      await this.Model.deleteOne({
+        username: data
+      })
+    } catch (err) {
+      throw new BadRequestException(err);
+    }
+  }
+
+  async updateName(values: {user: string, name: string}){
+    this.findByUsername(values.user);
+    validateName(values.name);
+    try {
+      await this.Model.updateOne({
+        username: values.user
+      }, {
+        name: values.name
+      })
+    } catch (err) {
+      throw new BadRequestException(err);
+    }
+  }
+
+  // async updateUsername(){
+
+  // }
+
+  // async updatePassword(){
+
   // }
 }

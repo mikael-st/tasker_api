@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable, UseInterceptors } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Response } from "express";
 import { Model, Schema } from "mongoose";
@@ -28,7 +28,6 @@ export class UserSevice {
 
   async create(data: UserDTO): Promise<IResp> {
     await this.userExists(data);
-    
     const user = new this.Model(data);
     try {
       await user.save()

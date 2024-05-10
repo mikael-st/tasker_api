@@ -1,8 +1,9 @@
-import { Body, Controller, Delete, Get, Post, UseFilters } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Post, UseInterceptors } from "@nestjs/common";
 import { response } from "express";
 import { UserDTO } from "src/DTO/user.dto";
 import { UserSevice } from "src/services/user.service";
 import { HttpExceptionFilter } from "src/utils/exception.filter";
+import { ValidateUser } from "src/utils/filters/validate_user.filter";
 
 @Controller('user')
 export class UserController {
@@ -12,10 +13,11 @@ export class UserController {
   getUsers() {}
 
   @Post()
+  @UseInterceptors(new ValidateUser())
   async create(
     @Body() value: UserDTO
   ) {
-    await this.service.create(value);
+    // await this.service.create(value);
   }
 
   // @Delete()

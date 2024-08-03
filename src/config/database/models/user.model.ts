@@ -1,6 +1,6 @@
 import { model, Schema, Document } from "mongoose";
 
-export interface IUser extends Document {
+export interface User extends Document {
   readonly _id: Schema.Types.ObjectId;
   readonly name: string;
   readonly username: string;
@@ -13,4 +13,4 @@ export const UserSchema = new Schema({
   password: {type: String, required: true},
 })
 
-export const User = model<IUser>('user', UserSchema);
+export const User = model<User>('User', UserSchema);

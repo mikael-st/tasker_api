@@ -45,7 +45,7 @@ export const minLengthValid = (data: string) => {
   if (havePassword(data) && minLength(data, 8)) { 
     return;
   } else {
-    throw new InvalidPasswordException('invalid password, password must have at least 8 characters');
+    throw new InvalidPasswordException('invalid password, password must have at least 8 characters', 400);
   };
 }
 
@@ -53,6 +53,6 @@ export const maxLengthValid = (data: string) => {
   if (havePassword(data) && maxLength(data, 20)) { 
     return;
   } else {
-    throw new InvalidPasswordException('invalid password, password is too longer')
+    throw new InvalidPasswordException('invalid password, password is too longer', 400);
   };
 }

@@ -4,21 +4,16 @@ import { AppService } from '../services/app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { DATABASE_URI } from 'src/config/env.config';
 import { UserController } from 'src/controller/user.controller';
-import { UserSevice } from 'src/services/user.service';
+import { UserRepository } from 'src/repositories/user.repository';
 import { UserSchema } from 'src/config/database/models/user.model';
+import { UserModule } from './user.module';
 
 @Module({
   imports: [
-    MongooseModule.forRootAsync({
-      useFactory: () => ({
-        uri: DATABASE_URI,
-      })
-    }),
-    MongooseModule.forFeature([
-      { name: 'user', schema: UserSchema }
-    ]),
+    MongooseModule.forRoot(DATABASE_URI),
+    UserModule
   ],
-  controllers: [AppController, UserController],
-  providers: [AppService, UserSevice],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}

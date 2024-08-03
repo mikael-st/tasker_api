@@ -1,7 +1,7 @@
 import { IsNotEmpty, IsString, IsDefined, MinLength, Matches, MaxLength } from 'class-validator';
 
 export class UserDTO {
-  readonly id: string;
+  readonly id?: string;
   @IsDefined()
   readonly name: string;
 

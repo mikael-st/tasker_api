@@ -1,11 +1,11 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UseInterceptors } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseInterceptors } from "@nestjs/common";
 import { UserDTO } from "src/DTO/user.dto";
-import { UserSevice } from "src/services/user.service";
+import { UserRepository } from "src/repositories/user.repository";
 import { ValidateUser } from "src/utils/filters/validate_user.filter";
 
-@Controller('user')
+@Controller('users')
 export class UserController {
-  constructor(private readonly service: UserSevice) {}
+  constructor(private readonly repository: UserRepository) {}
 
   @Post('/login')
   @UseInterceptors()
@@ -18,25 +18,39 @@ export class UserController {
   async create(
     @Body() value: UserDTO
   ) {
-    await this.service.create(value);
+    return await this.repository.create(value);
   }
 
-  @Delete()
-  async delete(
-    @Body() value: { username: string }
-  ) {
-    await this.service.delete(value.username);
+  @Get()
+  async list() {
+    return await this.repository.list();
   }
 
-  @Patch(':id')
-  async updateName(
-    @Body() value: { name: string },
-    @Param('id') user: string
+  @Get(':username')
+  async find(
+    @Param('username') username: string
   ) {
-    await this.service.updateName({
-      user: user,
-      name: value.name
-    });
+    console.log(username);
+    
+    return await this.repository.find(username);
   }
+
+  // @Delete()
+  // async delete(
+  //   @Body() value: { username: string }
+  // ) {
+  //   await this.repository.delete(value.username);
+  // }
+
+  // @Patch(':id')
+  // async updateName(
+  //   @Body() value: { name: string },
+  //   @Param('id') user: string
+  // ) {
+  //   await this.repository.updateName({
+  //     user: user,
+  //     name: value.name
+  //   });
+  // }
 
 }

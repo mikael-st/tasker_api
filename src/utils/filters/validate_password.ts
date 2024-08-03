@@ -16,7 +16,7 @@ export abstract class ValidatePassword {
     if (this.havePassword(data) && minLength(data.password, 8)) { 
       return;
     } else {
-      throw new InvalidPasswordException('invalid password, password must have at least 8 characters');
+      throw new InvalidPasswordException('invalid password, password must have at least 8 characters', 400);
     };
   }
 
@@ -24,7 +24,7 @@ export abstract class ValidatePassword {
     if (this.havePassword(data) && maxLength(data.password, 20)) { 
       return;
     } else {
-      throw new InvalidPasswordException('invalid password, password is too longer')
+      throw new InvalidPasswordException('invalid password, password is too longer', 400);
     };
   }
 }

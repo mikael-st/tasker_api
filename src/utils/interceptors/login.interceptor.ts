@@ -4,13 +4,13 @@ import { UserNotExistsException } from "../errors/user_not_exists.exception";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { UserDTO } from "src/DTO/user.dto";
-import { IUser } from "src/config/database/models/user.model";
+import { User } from "src/config/database/models/user.model";
 import { compare } from "bcryptjs";
 import { InvalidPasswordException } from "../errors/invalid_password.exception";
 
 @Injectable()
 export class LoginIterceptor implements NestInterceptor {
-  constructor(@InjectModel('user') private readonly Model: Model<IUser>){}
+  constructor(@InjectModel('user') private readonly Model: Model<User>){}
 
   async intercept(context: ExecutionContext, next: CallHandler<any>): Promise<Observable<any>> {
     const request = context.switchToHttp().getRequest();

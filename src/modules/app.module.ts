@@ -11,7 +11,7 @@ import { UserModule } from './user.module';
 @Module({
   imports: [
     MongooseModule.forRoot(DATABASE_URI),
-    UserModule
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],

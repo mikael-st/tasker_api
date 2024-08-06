@@ -1,17 +1,22 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseInterceptors } from "@nestjs/common";
 import { UserDTO } from "src/DTO/user.dto";
 import { UserRepository } from "src/repositories/user.repository";
+import { AuthService } from "src/services/auth.service";
 import { ValidateUser } from "src/utils/filters/validate_user.filter";
 
 @Controller('users')
 export class UserController {
-  constructor(private readonly repository: UserRepository) {}
+  constructor(
+    private readonly repository: UserRepository,
+    private readonly auth:       AuthService
+  ) {}
 
   @Post('/login')
-  @UseInterceptors()
   async login(
-    @Body() values: {username: string, password: string}
-  ) {}
+    @Body() values: {username: string, pass: string}
+  ) {
+    return this.auth.validate(values);
+  }
 
   @Post()
   @UseInterceptors(new ValidateUser())

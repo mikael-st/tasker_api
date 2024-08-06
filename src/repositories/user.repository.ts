@@ -1,20 +1,19 @@
-import { BadRequestException, Injectable, UseInterceptors } from "@nestjs/common";
+import { BadRequestException, Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { UserDTO } from "src/DTO/user.dto";
-import { User } from "src/config/database/models/user.model";
-import { UserExistsException } from "src/utils/errors/user_exists.error";
-import { UserNotExistsException } from "src/utils/errors/user_not_exists.exception";
-import { validateName } from "src/utils/validation.utils";
+import { User } from "@models/user.model";
+import { UserExistsException } from "@exceptions/user_exists.error";
+import { UserNotExistsException } from "@exceptions/user_not_exists.exception";
 
 @Injectable()
 export class UserRepository {
   constructor(
-    @InjectModel('User') private readonly Model: Model<User>
+    @InjectModel('User') private readonly Users: Model<User>
   ) {}
 
   async userExists(username: string) {
-    const exists = await this.Model.findOne({
+    const exists = await this.Users.findOne({
       username
     });
 
@@ -25,7 +24,7 @@ export class UserRepository {
 
   async list() {
     try {
-      const response = await this.Model.find().exec();
+      const response = await this.Users.find().exec();
 
       return response;
     } catch (err) {
@@ -35,7 +34,7 @@ export class UserRepository {
 
   async find(username: string): Promise<UserDTO> {
     try {
-      const user = await this.Model.findOne({
+      const user = await this.Users.findOne({
         username
       })
       
@@ -50,7 +49,7 @@ export class UserRepository {
 
   async create(data: UserDTO) {
     await this.userExists(data.username);
-    const user = new this.Model(data);
+    const user = new this.Users(data);
     try {
       await user.save()
 

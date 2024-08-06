@@ -29,7 +29,7 @@ export class UserController {
   }
 
   @Get()
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   async list() {
     return await this.repository.list();
   }

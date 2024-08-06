@@ -1,8 +1,7 @@
 import { Module } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { MongooseModule } from "@nestjs/mongoose";
-import { AuthGuard } from "@nestjs/passport";
-import { UserSchema } from "src/config/database/models/user.model";
+import { UserSchema } from "@models/user.model";
 import { UserController } from "src/controller/user.controller";
 import { UserRepository } from "src/repositories/user.repository";
 import { AuthService } from "src/services/auth.service";

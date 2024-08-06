@@ -16,7 +16,7 @@ import { UserModule } from 'src/modules/user.module';
       signOptions: { expiresIn: '60s' /*CHANGE TO 24h*/ }
     })
   ],
-  providers: [ AuthService ],
+  providers: [ AuthService, JwtStrategy ],
   controllers: [ AuthController ],
   exports: [ AuthService ]
 })

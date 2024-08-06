@@ -1,7 +1,9 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseInterceptors } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards, UseInterceptors } from "@nestjs/common";
+import { AuthGuard } from "@nestjs/passport";
 import { UserDTO } from "src/DTO/user.dto";
 import { UserRepository } from "src/repositories/user.repository";
 import { AuthService } from "src/services/auth.service";
+import { JwtAuthGuard } from "src/services/auth/auth.guard";
 import { ValidateUser } from "src/utils/filters/validate_user.filter";
 
 @Controller('users')
@@ -27,6 +29,7 @@ export class UserController {
   }
 
   @Get()
+  @UseGuards(JwtAuthGuard)
   async list() {
     return await this.repository.list();
   }

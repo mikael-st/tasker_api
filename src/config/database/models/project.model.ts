@@ -1,4 +1,4 @@
-import { Prop, SchemaFactory } from "@nestjs/mongoose";
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { SchemaTypes } from "mongoose";
 import { User } from "./user.model";
 
@@ -9,20 +9,21 @@ enum ProjectStates {
   DONE = 'done',
 }
 
+@Schema()
 export class Project {
   @Prop()
   title: string;
 
   @Prop()
-  deacription: string;
+  description: string;
 
-  @Prop({ type: [ SchemaTypes.ObjectId ], ref: User })
+  @Prop({ type: SchemaTypes.ObjectId, ref: () => User })
   owner: User;
 
-  @Prop({ type: [ SchemaTypes.ObjectId ], ref: User })
+  @Prop({ type: [ SchemaTypes.ObjectId ], ref: () => User, default: [] })
   members: User[];
 
-  @Prop({ type: ProjectStates, default: ProjectStates.PENDING })
+  @Prop({ type: String, enum: ProjectStates, default: ProjectStates.PENDING })
   progress: ProjectStates;
 
   // @Prop()

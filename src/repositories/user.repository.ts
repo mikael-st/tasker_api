@@ -5,9 +5,10 @@ import { UserDTO } from "src/DTO/user.dto";
 import { User } from "@models/user.model";
 import { UserExistsException } from "@exceptions/user_exists.error";
 import { UserNotExistsException } from "@exceptions/user_not_exists.exception";
+import { Repository } from "@interfaces/Repository";
 
 @Injectable()
-export class UserRepository {
+export class UserRepository implements Repository {
   constructor(
     @InjectModel('User') private readonly Users: Model<User>
   ) {}
@@ -58,51 +59,8 @@ export class UserRepository {
       throw new BadRequestException(err);
     }
   }
-
-  // async delete(data: string) {
-  //   const { id } = await this.findByUsername(data);
-  //   try {
-  //     // await this.Model.deleteOne({
-  //     //   username: data
-  //     // })
-  //     await prisma.user.delete({
-  //       where: {
-  //         id: id
-  //       }
-  //     })
-  //     return 'deleted with success';
-  //   } catch (err) {
-  //     throw new BadRequestException(err);
-  //   }
-  // }
-
-  // async updateName(values: {user: string, name: string}){
-  //   const { id } = await this.findByUsername(values.user);
-  //   validateName(values.name);
-  //   try {
-  //     // await this.Model.updateOne({
-  //     //   username: values.user
-  //     // }, {
-  //     //   name: values.name
-  //     // })
-  //     await prisma.user.update({
-  //       where: {
-  //         id: id
-  //       },
-  //       data: {
-  //         name: values.name
-  //       }
-  //     })
-  //   } catch (err) {
-  //     throw new BadRequestException(err);
-  //   }
-  // }
-
-  // async updateUsername(){
-
-  // }
-
-  // async updatePassword(){
-
-  // }
+  
+  async edit(data: UserDTO) {};
+  
+  async delete() {};
 }

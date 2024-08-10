@@ -24,9 +24,10 @@
       "@controllers/*":  [ "./src/controllers/*" ],
       "@modules/*":      [ "./src/modules/*" ],
       "@services/*":     [ "./src/services/*" ],
-      "@exceptions/*":  [ "./src/utils/errors/*" ],
+      "@exceptions/*":   [ "./src/utils/errors/*" ],
       "@filters/*":      [ "./src/utils/filters/*" ],
-      "@interceptors/*": [ "./src/utils/interceptors/*" ]
+      "@interceptors/*": [ "./src/utils/interceptors/*" ],
+      "@interfaces/*":   [ "./src/utils/interfaces/*" ]
     }
   }
 }

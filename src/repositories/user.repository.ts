@@ -2,10 +2,10 @@ import { BadRequestException, Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { UserDTO } from "src/DTO/user.dto";
-import { User } from "@models/user.model";
 import { UserExistsException } from "@exceptions/user_exists.error";
 import { UserNotExistsException } from "@exceptions/user_not_exists.exception";
 import { Repository } from "@interfaces/Repository";
+import { User } from "@models/user.model";
 
 @Injectable()
 export class UserRepository implements Repository {
@@ -62,5 +62,7 @@ export class UserRepository implements Repository {
   
   async edit(data: UserDTO) {};
   
-  async delete() {};
+  async delete(id: string) {
+    
+  };
 }

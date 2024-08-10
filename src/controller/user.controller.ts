@@ -1,15 +1,17 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards, UseInterceptors } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
+import { RelationRequestRepository, SendRelationRequestDTO } from "@repositories/relation_request.repository";
 import { UserDTO } from "src/DTO/user.dto";
 import { UserRepository } from "src/repositories/user.repository";
 import { AuthService } from "src/services/auth.service";
 import { JwtAuthGuard } from "src/services/auth/auth.guard";
 import { ValidateUser } from "src/utils/filters/validate_user.filter";
 
-@Controller('users')
+@Controller('user')
 export class UserController {
   constructor(
-    private readonly repository: UserRepository,
+    private readonly userRepository: UserRepository,
+    private readonly relationRepository: RelationRequestRepository,
     private readonly auth:       AuthService
   ) {}
 
@@ -25,13 +27,13 @@ export class UserController {
   async create(
     @Body() value: UserDTO
   ) {
-    return await this.repository.create(value);
+    return await this.userRepository.create(value);
   }
 
   @Get()
   // @UseGuards(JwtAuthGuard)
   async list() {
-    return await this.repository.list();
+    return await this.userRepository.list();
   }
 
   @Get(':username')
@@ -40,7 +42,14 @@ export class UserController {
   ) {
     console.log(username);
     
-    return await this.repository.find(username);
+    return await this.userRepository.find(username);
+  }
+
+  @Post('/relation')
+  async send(
+    @Body() data: SendRelationRequestDTO
+  ){
+    await this.relationRepository.create(data);
   }
 
   // @Delete()

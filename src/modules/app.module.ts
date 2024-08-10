@@ -10,7 +10,7 @@ import { ProjectsModule } from './projects.module';
   imports: [
     MongooseModule.forRoot(DATABASE_URI),
     UserModule,
-    ProjectsModule
+    ProjectsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

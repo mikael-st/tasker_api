@@ -1,5 +1,7 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { SchemaTypes } from "mongoose";
+import { Schema as MongooseSchema } from "mongoose";
+import { RelationRequest } from "./relation_request.model";
+import { Project } from "./project.model";
 
 @Schema()
 export class User {
@@ -9,11 +11,14 @@ export class User {
   @Prop({ unique: [ true, 'Already exists' ] })
   username: string;
 
-  // @Prop({ unique: [ true, 'Already exists' ] })
-  // email: string;
-
   @Prop()
   password: string;
+
+  @Prop({ type: [ MongooseSchema.Types.ObjectId ], ref: 'RelationRequest', default: [] })
+  relation_requests: MongooseSchema.Types.ObjectId[]
+
+  // @Prop({ type: [ SchemaTypes.ObjectId ], ref: () => Project, default: [] })
+  // projects: Project[]
 
   // @Prop()
   // enterprise: boolean;

@@ -1,8 +1,9 @@
+import { ProjectNotExistsException } from "@exceptions/project_not_exists.exception";
 import { Repository } from "@interfaces/Repository";
-import { BadRequestException, Injectable } from "@nestjs/common";
+import { Project } from "@models/project.model";
+import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
-import { Project } from "src/config/database/models/project.model";
 import { CreateProjectDTO } from "src/DTO/create_project.dto";
 
 @Injectable()
@@ -29,7 +30,7 @@ export class ProjectRepository implements Repository {
     }
   };
 
-  async list() {    
+  async list() {  
     try {
       const projects = await this.Projects
                           .find()
@@ -51,6 +52,10 @@ export class ProjectRepository implements Repository {
                           .populate('owner')
                           .populate('members')
                           .exec();
+
+      if (!projects) {
+        throw new ProjectNotExistsException();
+      }
 
       return projects;
     } catch (err) {

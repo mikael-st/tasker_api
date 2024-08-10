@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Headers, Param, Post } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Headers, Param, Post, Query } from "@nestjs/common";
 import { CreateProjectDTO } from "src/DTO/create_project.dto";
 import { ProjectRepository } from "src/repositories/projects.repository";
 
@@ -16,16 +16,16 @@ export class ProjectController {
     return await this.repository.create(data); 
   }
 
-  @Get()
+  @Get('/list')
   async list() {
     return await this.repository.list();
   }
 
-  @Get(':id')
+  @Get()
   async find(
-    @Param('id') id: string
+    @Query() query: any
   ) {
-    return await this.repository.find(id);
+    return await this.repository.find(query.id);
   }
 
   @Delete('/del/:id')
@@ -35,7 +35,7 @@ export class ProjectController {
     await this.repository.delete(id);
   }
 
-  @Get()
+  @Get('/status')
   async status() {
     return { status: 'OK' }
   }

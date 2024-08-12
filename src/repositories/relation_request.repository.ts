@@ -1,3 +1,4 @@
+import { AlreadyExistsException } from "@exceptions/user_exists.error";
 import { Repository } from "@interfaces/Repository";
 import { RelationRequest } from "@models/relation_request.model";
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
@@ -15,7 +16,22 @@ export class RelationRequestRepository {
     @InjectModel('RelationRequest') private readonly RelationRequest: Model<RelationRequest>
   ) {}
 
+  async requestAlreadyExists(data: SendRelationRequestDTO) {
+    const exists = await this.RelationRequest.findOne(
+      {
+        receiver: data.receiver,
+        sender: data.sender
+      }
+    );
+
+    if (exists) {
+      throw new AlreadyExistsException('REQUEST WITH SENDER AND RECEIVER ALREADY EXISTS');
+    }
+  }
+
   async create(data: SendRelationRequestDTO) {
+    await this.requestAlreadyExists(data);
+    
     const request = new this.RelationRequest(data);
 
     try {
@@ -31,10 +47,12 @@ export class RelationRequestRepository {
     try {
       const response = await this.RelationRequest
                           .find()
+                          .where('receiver').equals(key)
+                          .where('sender').equals(key)
                           .where('pending').equals(true)
                           .exec();
     
-      if (!response) {
+      if (!response || response.length === 0) {
         throw new BadRequestException('WITHOUT RELATION REQUESTS');
       }
     } catch (err) {

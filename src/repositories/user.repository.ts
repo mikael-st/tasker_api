@@ -2,10 +2,11 @@ import { BadRequestException, Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { UserDTO } from "src/DTO/user.dto";
-import { UserExistsException } from "@exceptions/user_exists.error";
+import { AlreadyExistsException } from "@exceptions/user_exists.error";
 import { UserNotExistsException } from "@exceptions/user_not_exists.exception";
 import { Repository } from "@interfaces/Repository";
 import { User } from "@models/user.model";
+import { error } from "console";
 
 @Injectable()
 export class UserRepository implements Repository {
@@ -19,13 +20,16 @@ export class UserRepository implements Repository {
     });
 
     if (exists) {
-      throw new UserExistsException()
+      throw new AlreadyExistsException('USER WITH THIS USERNAME ALREADY EXISTS')
     }
   }
 
   async list() {
     try {
-      const response = await this.Users.find().exec();
+      const response = await this.Users
+                          .find()
+                          .populate('relation_requests')
+                          .exec();
 
       return response;
     } catch (err) {
@@ -37,7 +41,7 @@ export class UserRepository implements Repository {
     try {
       const user = await this.Users.findOne({
         username
-      })
+      }).populate('relation_requests');
       
       if (!user) {
         throw new UserNotExistsException();
@@ -60,9 +64,36 @@ export class UserRepository implements Repository {
     }
   }
   
-  async edit(data: UserDTO) {};
+  async edit(id: string, update: any) {
+    try {
+      const response = await this.Users.findOneAndUpdate(
+        { _id: id },
+        { $addToSet: update }
+      )
+
+      return {
+        obj: response,
+        error: false,
+        message: 'UPDATED WITH SUCCESS'
+      }
+    } catch (err) {
+      return {
+        obj: {},
+        error: true,
+        message: err
+      }
+    }
+  };
   
   async delete(id: string) {
     
   };
+}
+
+type EditUser = {
+  _id: string;
+  name: string;
+  username: string;
+  email: string;
+  password: string;
 }

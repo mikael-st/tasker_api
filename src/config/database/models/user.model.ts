@@ -11,6 +11,9 @@ export class User {
   @Prop({ unique: [ true, 'Already exists' ] })
   username: string;
 
+  @Prop({ unique: [ true, 'Already exists'] })
+  email: string;
+
   @Prop()
   password: string;
 

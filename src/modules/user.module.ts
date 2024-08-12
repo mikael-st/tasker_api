@@ -9,6 +9,7 @@ import { JwtAuthGuard } from "src/services/auth/auth.guard";
 import { ProjectSchema } from "@models/project.model";
 import { RelationRequestRepository } from "@repositories/relation_request.repository";
 import { RelationSchema } from "@models/relation_request.model";
+import { RelationService } from "@services/relation.service";
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { RelationSchema } from "@models/relation_request.model";
   providers: [
     UserRepository,
     RelationRequestRepository,
+    RelationService,
     AuthService,
     JwtService,
     JwtAuthGuard ]

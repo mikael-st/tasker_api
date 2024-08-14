@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards, UseInterceptors } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
-import { RelationRequestRepository, SendRelationRequestDTO } from "@repositories/relation_request.repository";
+import { SendRelationRequestDTO } from "@repositories/invites.repository";
 import { RelationService } from "@services/relation.service";
 import { UserDTO } from "src/DTO/user.dto";
 import { UserRepository } from "src/repositories/user.repository";
@@ -46,11 +46,18 @@ export class UserController {
     return await this.userRepository.find(username);
   }
 
-  @Post('/relation')
+  @Post('/invite')
   async send(
     @Body() data: SendRelationRequestDTO
   ){
-    await this.relationService.send(data);
+    return await this.relationService.send(data);
+  }
+
+  @Get('/invite/:username')
+  async listRequests(
+    @Param('username') username: string
+  ){
+    return await this.relationService.list(username);
   }
 
   // @Delete()

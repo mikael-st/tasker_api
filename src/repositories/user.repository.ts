@@ -6,7 +6,6 @@ import { AlreadyExistsException } from "@exceptions/user_exists.error";
 import { UserNotExistsException } from "@exceptions/user_not_exists.exception";
 import { Repository } from "@interfaces/Repository";
 import { User } from "@models/user.model";
-import { error } from "console";
 
 @Injectable()
 export class UserRepository implements Repository {
@@ -28,7 +27,7 @@ export class UserRepository implements Repository {
     try {
       const response = await this.Users
                           .find()
-                          .populate('relation_requests')
+                          .populate('invites')
                           .exec();
 
       return response;
@@ -41,7 +40,7 @@ export class UserRepository implements Repository {
     try {
       const user = await this.Users.findOne({
         username
-      }).populate('relation_requests');
+      }).populate('invites');
       
       if (!user) {
         throw new UserNotExistsException();

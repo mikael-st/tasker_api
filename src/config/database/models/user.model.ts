@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Schema as MongooseSchema } from "mongoose";
-import { RelationRequest } from "./relation_request.model";
+import { Invite } from "./invite.model";
 import { Project } from "./project.model";
 
 @Schema()
@@ -18,7 +18,7 @@ export class User {
   password: string;
 
   @Prop({ type: [ MongooseSchema.Types.ObjectId ], ref: 'RelationRequest', default: [] })
-  relation_requests: MongooseSchema.Types.ObjectId[]
+  invites: MongooseSchema.Types.ObjectId[]
 
   // @Prop({ type: [ SchemaTypes.ObjectId ], ref: () => Project, default: [] })
   // projects: Project[]

@@ -7,8 +7,8 @@ import { UserRepository } from "src/repositories/user.repository";
 import { AuthService } from "src/services/auth.service";
 import { JwtAuthGuard } from "src/services/auth/auth.guard";
 import { ProjectSchema } from "@models/project.model";
-import { RelationRequestRepository } from "@repositories/relation_request.repository";
-import { RelationSchema } from "@models/relation_request.model";
+import { InvitesRepository } from "@repositories/invites.repository";
+import { InviteSchema } from "@models/invite.model";
 import { RelationService } from "@services/relation.service";
 
 @Module({
@@ -16,13 +16,13 @@ import { RelationService } from "@services/relation.service";
     MongooseModule.forFeature([
       { name: 'Project', schema: ProjectSchema },
       { name: 'User', schema: UserSchema },
-      { name: 'RelationRequest', schema: RelationSchema }
+      { name: 'RelationRequest', schema: InviteSchema }
     ]),
   ],
   controllers: [ UserController ],
   providers: [
     UserRepository,
-    RelationRequestRepository,
+    InvitesRepository,
     RelationService,
     AuthService,
     JwtService,

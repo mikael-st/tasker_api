@@ -3,8 +3,8 @@ import { Schema as MongooseSchema } from "mongoose";
 import { User } from "./user.model";
 
 @Schema()
-export class RelationRequest {
-  @Prop({ type: Boolean })
+export class Invite {
+  @Prop({ type: Boolean, default: true })
   peding: boolean;
 
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User' })
@@ -14,4 +14,4 @@ export class RelationRequest {
   receiver: MongooseSchema.Types.ObjectId;
 }
 
-export const RelationSchema = SchemaFactory.createForClass(RelationRequest)
+export const InviteSchema = SchemaFactory.createForClass(Invite)

@@ -1,6 +1,6 @@
 import { AlreadyExistsException } from "@exceptions/user_exists.error";
 import { Repository } from "@interfaces/Repository";
-import { RelationRequest } from "@models/relation_request.model";
+import { Invite } from "@models/invite.model";
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
@@ -11,9 +11,9 @@ export type SendRelationRequestDTO = {
 }
 
 @Injectable()
-export class RelationRequestRepository {
+export class InvitesRepository {
   constructor(
-    @InjectModel('RelationRequest') private readonly RelationRequest: Model<RelationRequest>
+    @InjectModel('RelationRequest') private readonly RelationRequest: Model<Invite>
   ) {}
 
   async requestAlreadyExists(data: SendRelationRequestDTO) {
@@ -46,15 +46,19 @@ export class RelationRequestRepository {
   async list(key: string) {
     try {
       const response = await this.RelationRequest
-                          .find()
-                          .where('receiver').equals(key)
-                          .where('sender').equals(key)
-                          .where('pending').equals(true)
-                          .exec();
-    
+        .find({
+                          $or: [
+                            { sender: key },
+                            { receiver: key },
+                            { $and: [{ peding: true }] }
+                          ],
+                        }).exec();
+      
       if (!response || response.length === 0) {
-        throw new BadRequestException('WITHOUT RELATION REQUESTS');
+        return 'WITHOUT RELATION REQUESTS';
       }
+
+      return response;
     } catch (err) {
       throw new BadRequestException(err);
     }

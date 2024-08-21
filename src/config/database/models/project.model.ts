@@ -1,39 +1,27 @@
-import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { SchemaTypes } from "mongoose";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { User } from "./user.model";
 
-enum ProjectStates {
-  PENDING = 'pending',
-  IN_PROGRESS = 'in progress',
-  PAUSED = 'paused',
-  DONE = 'done',
+export enum ProjectProgress {
+  PENDING = 'PENDING',
+  IN_PROGRESS = 'IN_PROGRESS',
+  PAUSED='PAUSED',
+  COMPLETED = 'COMPLETED',
 }
 
-@Schema()
+@Entity()
 export class Project {
-  @Prop()
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
+  @Column({})
   title: string;
 
-  @Prop()
-  description: string;
+  @ManyToOne(() => User, (user) => user.projects)
+  owner: string;
 
-  @Prop({ type: SchemaTypes.ObjectId, ref: () => User })
-  owner: User;
-
-  @Prop({ type: [ SchemaTypes.ObjectId ], ref: () => User, default: [] })
-  members: User[];
-
-  @Prop({ type: String, enum: ProjectStates, default: ProjectStates.PENDING })
-  progress: ProjectStates;
-
-  // @Prop()
-  // tasks: REF TASK SCHEMA ( TO_DO )
-
-  // @Prop()
-  // check_points: REF CHECK_POINT SCHEMA ( TO_DO )
-
-  @Prop({ type: Date, default: Date.now() })
-  created_at: Date;
+  @Column({
+    type: 'enum',
+    enum: ProjectProgress,
+    default: ProjectProgress.PENDING })
+  progress: ProjectProgress
 }
-
-export const ProjectSchema = SchemaFactory.createForClass(Project);

@@ -1,23 +1,19 @@
 import { Module } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import { MongooseModule } from "@nestjs/mongoose";
-import { UserSchema } from "@models/user.model";
+// import { UserSchema } from "@models/user.model";
 import { UserController } from "src/controller/user.controller";
 import { UserRepository } from "src/repositories/user.repository";
 import { AuthService } from "src/services/auth.service";
 import { JwtAuthGuard } from "src/services/auth/auth.guard";
-import { ProjectSchema } from "@models/project.model";
 import { InvitesRepository } from "@repositories/invites.repository";
-import { InviteSchema } from "@models/invite.model";
 import { RelationService } from "@services/relation.service";
+import { User } from "@models/user.model";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { Invite } from "@models/invite.model";
 
 @Module({
   imports: [
-    MongooseModule.forFeature([
-      { name: 'Project', schema: ProjectSchema },
-      { name: 'User', schema: UserSchema },
-      { name: 'RelationRequest', schema: InviteSchema }
-    ]),
+    TypeOrmModule.forFeature([ User, Invite ]),
   ],
   controllers: [ UserController ],
   providers: [

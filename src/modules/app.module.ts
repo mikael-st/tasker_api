@@ -1,16 +1,23 @@
 import { Module } from '@nestjs/common';
 import { AppController } from '../controller/app.controller';
 import { AppService } from '../services/app.service';
-import { MongooseModule } from '@nestjs/mongoose';
 import { DATABASE_URI } from 'src/config/env.config';
+import { User, Invite, Project } from '@models/index';
 import { UserModule } from './user.module';
-import { ProjectsModule } from './projects.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
-    MongooseModule.forRoot(DATABASE_URI),
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      url: DATABASE_URI,
+      entities: [ User, Invite, Project],
+      migrations: ['src/config/database/migrations'],
+      synchronize: true,
+      autoLoadEntities: true,
+    }),
     UserModule,
-    ProjectsModule,
+    // ProjectsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

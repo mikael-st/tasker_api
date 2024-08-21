@@ -1,17 +1,19 @@
-import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Schema as MongooseSchema } from "mongoose";
 import { User } from "./user.model";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
-@Schema()
+@Entity()
 export class Invite {
-  @Prop({ type: Boolean, default: true })
-  peding: boolean;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
-  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User' })
-  sender: MongooseSchema.Types.ObjectId;
+  @Column({ type: 'boolean', default: true })
+  pending: boolean;
 
-  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User' })
-  receiver: MongooseSchema.Types.ObjectId;
+  @Column({ type: 'uuid', unique: true })
+  @ManyToOne(() => User, (user) => user.sent_invites)
+  sender: string;
+
+  @Column({ type: 'uuid', unique: true })
+  @ManyToOne(() => User, (user) => user.received_invites)
+  receiver: string;
 }
-
-export const InviteSchema = SchemaFactory.createForClass(Invite)

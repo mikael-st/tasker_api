@@ -1,33 +1,37 @@
-import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Schema as MongooseSchema } from "mongoose";
 import { Invite } from "./invite.model";
 import { Project } from "./project.model";
 
-@Schema()
+import { Column, Entity, Generated, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+
+@Entity()
 export class User {
-  @Prop()
-  name: string;
+  @Generated()
+  id: string
+  
+  @PrimaryColumn({ unique: true })
+  username: string
+  
+  @Column()
+  name: string
 
-  @Prop({ unique: [ true, 'Already exists' ] })
-  username: string;
-
-  @Prop({ unique: [ true, 'Already exists'] })
-  email: string;
-
-  @Prop()
+  @Column()
   password: string;
 
-  @Prop({ type: [ MongooseSchema.Types.ObjectId ], ref: 'RelationRequest', default: [] })
-  invites: MongooseSchema.Types.ObjectId[]
+  @Column({ unique: true })
+  email: string;
 
-  // @Prop({ type: [ SchemaTypes.ObjectId ], ref: () => Project, default: [] })
-  // projects: Project[]
+  @Column({
+    type: 'boolean',
+    default: false
+  })
+  enterprise: boolean;
 
-  // @Prop()
-  // enterprise: boolean;
+  @OneToMany(() => Invite, (invite) => invite.sender)
+  sent_invites: Invite[];
 
-  // @Prop({ type: [ SchemaTypes.ObjectId ], ref: User })
-  // affiliations: User[];
+  @OneToMany(() => Invite, (invite) => invite.receiver)
+  received_invites: Invite[];
+
+  @OneToMany(() => Project, (project) => project.owner)
+  projects: Project[];
 }
-
-export const UserSchema = SchemaFactory.createForClass(User);

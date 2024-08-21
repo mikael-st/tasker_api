@@ -1,11 +1,11 @@
 import { AlreadyExistsException } from "@exceptions/user_exists.error";
-import { Repository } from "@interfaces/Repository";
+import { Repository } from "typeorm";
 import { Invite } from "@models/invite.model";
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
-import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
+import { Result } from "@interfaces/Response";
+import { InjectRepository } from "@nestjs/typeorm";
 
-export type SendRelationRequestDTO = {
+export type SendInvitesDTO = {
   receiver: string;
   sender: string;
 }
@@ -13,31 +13,23 @@ export type SendRelationRequestDTO = {
 @Injectable()
 export class InvitesRepository {
   constructor(
-    @InjectModel('RelationRequest') private readonly RelationRequest: Model<Invite>
+    @InjectRepository(Invite) private readonly Invites: Repository<Invite>
   ) {}
 
-  async requestAlreadyExists(data: SendRelationRequestDTO) {
-    const exists = await this.RelationRequest.findOne(
-      {
-        receiver: data.receiver,
-        sender: data.sender
-      }
-    );
-
-    if (exists) {
-      throw new AlreadyExistsException('REQUEST WITH SENDER AND RECEIVER ALREADY EXISTS');
-    }
-  }
-
-  async create(data: SendRelationRequestDTO) {
-    await this.requestAlreadyExists(data);
-    
-    const request = new this.RelationRequest(data);
-
+  async create(data: SendInvitesDTO) {
     try {
-      await request.save();
+      const result = await this.Invites.save(
+        {
+          sender: data.sender,
+          receiver: data.receiver
+        }
+      );
 
-      return request;
+      return {
+        data: result,
+        error: false,
+        message: 'CREATED'
+      } as Result;
     } catch (err) {
       throw new BadRequestException(err);
     }
@@ -45,14 +37,15 @@ export class InvitesRepository {
 
   async list(key: string) {
     try {
-      const response = await this.RelationRequest
-        .find({
-                          $or: [
-                            { sender: key },
-                            { receiver: key },
-                            { $and: [{ peding: true }] }
-                          ],
-                        }).exec();
+      const response = await this.Invites.find(
+        {
+          where: [
+            { sender: key },
+            { receiver: key }
+          ],
+          relations: ['sender', 'receiver']
+        }
+      )
       
       if (!response || response.length === 0) {
         return 'WITHOUT RELATION REQUESTS';
@@ -66,14 +59,18 @@ export class InvitesRepository {
   
   async edit(id: string, data: any) {
     try {
-      const response = this.RelationRequest.findOneAndUpdate(
+      const response = await this.Invites.update(
         {
-          _id: id
+          id: id
         },
         data
-      )
-
-      return 'CHANGED';
+      );
+      
+      return {
+        data: response,
+        error: false,
+        message: "CHANGED"
+      } as Result;
     } catch (err) {
       throw new BadRequestException(err);
     }
@@ -81,7 +78,11 @@ export class InvitesRepository {
 
   async delete(id: string) {
     try {
-      const response = await this.RelationRequest.deleteOne().where('_id').equals(id);
+      const response = await this.Invites.delete(
+        {
+          id: id
+        }
+      );
     
       if (!response) {
         throw new NotFoundException();

@@ -1,6 +1,6 @@
-import { Body, Controller, Delete, Get, Headers, Param, Post, Query } from "@nestjs/common";
+/* import { Body, Controller, Delete, Get, Headers, Param, Post, Query } from "@nestjs/common";
 import { CreateProjectDTO } from "src/DTO/create_project.dto";
-import { ProjectRepository } from "src/repositories/projects.repository";
+// import { ProjectRepository } from "src/repositories/projects.repository";
 
 @Controller('project')
 export class ProjectController {
@@ -39,4 +39,4 @@ export class ProjectController {
   async status() {
     return { status: 'OK' }
   }
-}
+} */

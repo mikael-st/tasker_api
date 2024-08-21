@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { InvitesRepository, SendRelationRequestDTO } from "@repositories/invites.repository";
+import { InvitesRepository, SendInvitesDTO } from "@repositories/invites.repository";
 import { UserRepository } from "@repositories/user.repository";
 
 @Injectable()
@@ -9,21 +9,11 @@ export class RelationService {
     private readonly usersRepository: UserRepository
   ){}
 
-  async send(data: SendRelationRequestDTO) {
+  async send(data: SendInvitesDTO) {
     const request = await this.inviteRepository.create({
       receiver: data.receiver,
       sender: data.sender
     })
-
-    await this.usersRepository.edit(
-      data.sender,
-      { invites: request.id }
-    );
-
-    await this.usersRepository.edit(
-      data.receiver,
-      { invites: request.id }
-    );
 
     return {
       obj: request,
@@ -36,5 +26,14 @@ export class RelationService {
     const invites = await this.inviteRepository.list(username);
     
     return invites;
+  }
+
+  async accept(id: string) {
+    const invite = await this.inviteRepository.edit(id, { pending: false });
+    
+    const { sender } = invite.data;
+    const { receiver } = invite.data;
+    
+    return invite;
   }
 }

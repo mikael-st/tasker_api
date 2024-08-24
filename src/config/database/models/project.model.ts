@@ -26,6 +26,10 @@ export class Project extends Model {
   @Column({
     type: DataType.STRING,
     allowNull: false,
+    references: {
+      model: User,
+      key: 'username'
+    }
   })
   owner: string;
 

@@ -35,7 +35,7 @@ export class RelationService {
   }
 
   async del(id: string) {
-    // const response = await this.inviteRepository.delete(id);
-    return 'to-do';
+    const response = await this.inviteRepository.delete(id);
+    return response;
   }
 }

@@ -3,7 +3,8 @@ import { Invite } from "@models/invite.model";
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { Result } from "@interfaces/Response";
 import { InjectModel } from "@nestjs/sequelize";
-import { Op } from "sequelize";
+import { Op, where } from "sequelize";
+import { Repository } from "@interfaces/Repository";
 
 export type SendInvitesDTO = {
   receiver: string;
@@ -16,7 +17,27 @@ export class InvitesRepository {
     @InjectModel(Invite) private readonly Invites: typeof Invite
   ) {}
 
+  async inviteAlreadyExists (sender: string, receiver: string) {
+    try {
+      const exists = await this.Invites.findOne({
+        where: {
+          [ Op.and ]: [
+            { sender: sender },
+            { receiver: receiver }
+          ]
+        }
+      })
+      
+      if (exists) {
+        throw new AlreadyExistsException('INVITE ALREADY EXISTS');
+      }
+    } catch (err) {
+      throw new BadRequestException(err);
+    }
+  }
+
   async create(data: SendInvitesDTO) {
+    await this.inviteAlreadyExists(data.sender, data.receiver);
     try {
       const result = await this.Invites.create(
         {
@@ -25,11 +46,7 @@ export class InvitesRepository {
         }
       );
 
-      return {
-        data: result,
-        error: false,
-        message: 'CREATED'
-      } as Result;
+      return result;
     } catch (err) {
       throw new BadRequestException(err);
     }
@@ -66,10 +83,13 @@ export class InvitesRepository {
   async edit(id: string, data: any) {
     try {
       const response = await this.Invites.update(
+        data,
         {
-          id: id
+          where: {
+            id: id
+          },
+          returning: true
         },
-        data
       );
       
       return {
@@ -82,21 +102,25 @@ export class InvitesRepository {
     }
   }
 
-  // async delete(id: string) {
-  //   try {
-  //     const response = await this.Invites.delete(
-  //       {
-  //         id: id
-  //       }
-  //     );
+  async delete(id: string) {
+    try {
+      const response = await this.Invites.destroy({
+        where: {
+          id: id
+        }
+      });
     
-  //     if (!response) {
-  //       throw new NotFoundException();
-  //     }
+      if (!response) {
+        throw new NotFoundException();
+      }
 
-  //     return 'REMOVED';
-  //   } catch (err) {
-  //     throw new BadRequestException(err);
-  //   }
-  // }
+      return {
+        data: response,
+        error: false,
+        message: 'REMOVED'
+      } as Result;
+    } catch (err) {
+      throw new BadRequestException(err);
+    }
+  }
 }

@@ -50,6 +50,6 @@ export class User extends Model {
   @HasMany(() => Invite)
   invites: Invite[];
 
-  // @HasMany(() => Project)
-  // projects: Project[];
+  @HasMany(() => Project)
+  projects: Project[];
 }

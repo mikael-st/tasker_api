@@ -1,6 +1,5 @@
-import { Model } from "sequelize";
 import { User } from "./user.model";
-import { BelongsTo, Column, DataType, Table } from "sequelize-typescript";
+import { Model, Column, DataType, ForeignKey, Table } from "sequelize-typescript";
 
 export enum ProjectProgress {
   PENDING = 'PENDING',
@@ -15,14 +14,19 @@ export class Project extends Model {
     type: DataType.UUID,
     defaultValue: DataType.UUIDV4,
     allowNull: false,
-    unique: true
+    unique: true,
+    primaryKey: true
   })
   id: string;
 
   @Column({})
   title: string;
 
-
+  @ForeignKey(() => User)
+  @Column({
+    type: DataType.STRING,
+    allowNull: false,
+  })
   owner: string;
 
   progress: ProjectProgress

@@ -3,6 +3,7 @@ import { Invite } from "@models/invite.model";
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { Result } from "@interfaces/Response";
 import { InjectModel } from "@nestjs/sequelize";
+import { Op } from "sequelize";
 
 export type SendInvitesDTO = {
   receiver: string;
@@ -38,10 +39,17 @@ export class InvitesRepository {
     try {
       const response = await this.Invites.findAll(
         {
-          where: [
-            { sender: key },
-            { receiver: key }
-          ]
+          where: {
+            [ Op.and ]: [
+              { pending: true },
+              {
+                [ Op.or ]: [
+                  { sender: key },
+                  { receiver: key }
+                ]
+              }
+            ]
+          }
         }
       )
       

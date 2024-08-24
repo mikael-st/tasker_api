@@ -14,7 +14,7 @@ export class Invite extends Model {
 
   @Column({
     type: DataType.BOOLEAN,
-    defaultValue: false,
+    defaultValue: true,
     allowNull: false,
   })
   pending: boolean;
@@ -23,13 +23,23 @@ export class Invite extends Model {
   @Column({
     type: DataType.STRING,
     allowNull: false,
+    references: {
+      model: User,
+      key: 'username'
+    },
+    unique: true
   })
-  sender: string;
+  sender: User;
 
   @ForeignKey(() => User)
   @Column({
     type: DataType.STRING,
     allowNull: false,
+    references: {
+      model: User,
+      key: 'username'
+    },
+    unique: true
   })
-  receiver: string;
+  receiver: User;
 }

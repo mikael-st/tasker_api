@@ -1,4 +1,4 @@
-import { DATABASE_URI } from "@config/env.config";
+import { DB_URL } from "@config/env.config";
 import { Invite } from "@models/invite.model";
 import { User } from "@models/user.model";
 import { Module } from "@nestjs/common";
@@ -8,7 +8,7 @@ import { SequelizeModule } from "@nestjs/sequelize";
   imports: [
     SequelizeModule.forRoot({
       dialect: 'postgres',
-      uri: DATABASE_URI,
+      uri: DB_URL,
       models: [ User, Invite ],
       autoLoadModels: true,
       synchronize: true

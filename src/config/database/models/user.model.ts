@@ -1,37 +1,55 @@
+import { Column, DataType, HasMany, Table, Model } from "sequelize-typescript";
 import { Invite } from "./invite.model";
 import { Project } from "./project.model";
 
-import { Column, Entity, Generated, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity()
-export class User {
-  @Generated()
+@Table
+export class User extends Model {
+  @Column({
+    type: DataType.UUID,
+    defaultValue: DataType.UUIDV4,
+    allowNull: false,
+    unique: true
+  })
   id: string
   
-  @PrimaryColumn({ unique: true })
+  @Column({
+    type: DataType.STRING,
+    allowNull: false,
+    unique: true,
+    primaryKey: true
+  })
   username: string
   
-  @Column()
+  @Column({
+    type: DataType.STRING,
+    allowNull: false,
+  })
   name: string
 
-  @Column()
+  @Column({
+    type: DataType.STRING,
+    allowNull: false,
+  })
   password: string;
 
-  @Column({ unique: true })
+  @Column({
+    type: DataType.STRING,
+    allowNull: false,
+    unique: true
+  })
   email: string;
 
   @Column({
-    type: 'boolean',
-    default: false
+    type: DataType.BOOLEAN,
+    allowNull: false,
+    defaultValue: false
   })
   enterprise: boolean;
 
-  @OneToMany(() => Invite, (invite) => invite.sender)
-  sent_invites: Invite[];
+  @HasMany(() => Invite)
+  invites: Invite[];
 
-  @OneToMany(() => Invite, (invite) => invite.receiver)
-  received_invites: Invite[];
-
-  @OneToMany(() => Project, (project) => project.owner)
-  projects: Project[];
+  // @HasMany(() => Project)
+  // projects: Project[];
 }

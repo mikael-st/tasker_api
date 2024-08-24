@@ -8,12 +8,12 @@ import { JwtAuthGuard } from "src/services/auth/auth.guard";
 import { InvitesRepository } from "@repositories/invites.repository";
 import { RelationService } from "@services/relation.service";
 import { User } from "@models/user.model";
-import { TypeOrmModule } from "@nestjs/typeorm";
 import { Invite } from "@models/invite.model";
+import { SequelizeModule } from "@nestjs/sequelize";
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([ User, Invite ]),
+    SequelizeModule.forFeature([ User, Invite ]),
   ],
   controllers: [ UserController ],
   providers: [

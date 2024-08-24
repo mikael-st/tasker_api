@@ -1,21 +1,14 @@
 import { Module } from '@nestjs/common';
 import { AppController } from '../controller/app.controller';
 import { AppService } from '../services/app.service';
-import { DATABASE_URI } from 'src/config/env.config';
+import { DATABASE_URI, STATE } from 'src/config/env.config';
 import { User, Invite, Project } from '@models/index';
 import { UserModule } from './user.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { DatabaseModule } from '@config/database/database.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      url: DATABASE_URI,
-      entities: [ User, Invite, Project],
-      migrations: ['src/config/database/migrations'],
-      synchronize: true,
-      autoLoadEntities: true,
-    }),
+    DatabaseModule,
     UserModule,
     // ProjectsModule,
   ],

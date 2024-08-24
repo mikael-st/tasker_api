@@ -1,9 +1,8 @@
 import { AlreadyExistsException } from "@exceptions/user_exists.error";
-import { Repository } from "typeorm";
 import { Invite } from "@models/invite.model";
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { Result } from "@interfaces/Response";
-import { InjectRepository } from "@nestjs/typeorm";
+import { InjectModel } from "@nestjs/sequelize";
 
 export type SendInvitesDTO = {
   receiver: string;
@@ -13,12 +12,12 @@ export type SendInvitesDTO = {
 @Injectable()
 export class InvitesRepository {
   constructor(
-    @InjectRepository(Invite) private readonly Invites: Repository<Invite>
+    @InjectModel(Invite) private readonly Invites: typeof Invite
   ) {}
 
   async create(data: SendInvitesDTO) {
     try {
-      const result = await this.Invites.save(
+      const result = await this.Invites.create(
         {
           sender: data.sender,
           receiver: data.receiver
@@ -37,13 +36,12 @@ export class InvitesRepository {
 
   async list(key: string) {
     try {
-      const response = await this.Invites.find(
+      const response = await this.Invites.findAll(
         {
           where: [
             { sender: key },
             { receiver: key }
-          ],
-          relations: ['sender', 'receiver']
+          ]
         }
       )
       
@@ -76,21 +74,21 @@ export class InvitesRepository {
     }
   }
 
-  async delete(id: string) {
-    try {
-      const response = await this.Invites.delete(
-        {
-          id: id
-        }
-      );
+  // async delete(id: string) {
+  //   try {
+  //     const response = await this.Invites.delete(
+  //       {
+  //         id: id
+  //       }
+  //     );
     
-      if (!response) {
-        throw new NotFoundException();
-      }
+  //     if (!response) {
+  //       throw new NotFoundException();
+  //     }
 
-      return 'REMOVED';
-    } catch (err) {
-      throw new BadRequestException(err);
-    }
-  }
+  //     return 'REMOVED';
+  //   } catch (err) {
+  //     throw new BadRequestException(err);
+  //   }
+  // }
 }

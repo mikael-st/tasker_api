@@ -66,6 +66,13 @@ export class UserController {
     return await this.relationService.accept(invite_id);
   }
 
+  @Delete('/invite/del/:id')
+  async deleteInvite(
+    @Param('id') id: string
+  ) {
+    return await this.relationService.del(id);
+  }
+
   // @Delete()
   // async delete(
   //   @Body() value: { username: string }

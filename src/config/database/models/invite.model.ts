@@ -1,19 +1,35 @@
+import { Model, Column, DataType, ForeignKey, Table } from "sequelize-typescript";
 import { User } from "./user.model";
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity()
-export class Invite {
-  @PrimaryGeneratedColumn('uuid')
+@Table
+export class Invite extends Model {
+  @Column({
+    type: DataType.UUID,
+    defaultValue: DataType.UUIDV4,
+    allowNull: false,
+    unique: true,
+    primaryKey: true
+  })
   id: string;
 
-  @Column({ type: 'boolean', default: true })
+  @Column({
+    type: DataType.BOOLEAN,
+    defaultValue: false,
+    allowNull: false,
+  })
   pending: boolean;
 
-  @Column({ type: 'uuid', unique: true })
-  @ManyToOne(() => User, (user) => user.sent_invites)
+  @ForeignKey(() => User)
+  @Column({
+    type: DataType.STRING,
+    allowNull: false,
+  })
   sender: string;
 
-  @Column({ type: 'uuid', unique: true })
-  @ManyToOne(() => User, (user) => user.received_invites)
+  @ForeignKey(() => User)
+  @Column({
+    type: DataType.STRING,
+    allowNull: false,
+  })
   receiver: string;
 }

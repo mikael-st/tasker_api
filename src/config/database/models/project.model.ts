@@ -1,5 +1,6 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Model } from "sequelize";
 import { User } from "./user.model";
+import { BelongsTo, Column, DataType, Table } from "sequelize-typescript";
 
 export enum ProjectProgress {
   PENDING = 'PENDING',
@@ -8,20 +9,21 @@ export enum ProjectProgress {
   COMPLETED = 'COMPLETED',
 }
 
-@Entity()
-export class Project {
-  @PrimaryGeneratedColumn('uuid')
+@Table
+export class Project extends Model {
+  @Column({
+    type: DataType.UUID,
+    defaultValue: DataType.UUIDV4,
+    allowNull: false,
+    unique: true
+  })
   id: string;
 
   @Column({})
   title: string;
 
-  @ManyToOne(() => User, (user) => user.projects)
+
   owner: string;
 
-  @Column({
-    type: 'enum',
-    enum: ProjectProgress,
-    default: ProjectProgress.PENDING })
   progress: ProjectProgress
 }

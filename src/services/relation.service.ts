@@ -31,9 +31,11 @@ export class RelationService {
   async accept(id: string) {
     const invite = await this.inviteRepository.edit(id, { pending: false });
     
-    const { sender } = invite.data;
-    const { receiver } = invite.data;
-    
     return invite;
+  }
+
+  async del(id: string) {
+    // const response = await this.inviteRepository.delete(id);
+    return 'to-do';
   }
 }

@@ -2,7 +2,6 @@ import { Column, DataType, HasMany, Table, Model } from "sequelize-typescript";
 import { Invite } from "./invite.model";
 import { Project } from "./project.model";
 
-
 @Table
 export class User extends Model {
   @Column({

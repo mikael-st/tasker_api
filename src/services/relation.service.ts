@@ -1,19 +1,17 @@
 import { Injectable } from "@nestjs/common";
 import { InvitesRepository, SendInvitesDTO } from "@repositories/invites.repository";
-import { UserRepository } from "@repositories/user.repository";
 
 @Injectable()
 export class RelationService {
   constructor(
     private readonly inviteRepository: InvitesRepository,
-    private readonly usersRepository: UserRepository
   ){}
 
   async send(data: SendInvitesDTO) {
     const request = await this.inviteRepository.create({
       receiver: data.receiver,
       sender: data.sender
-    })
+    });
 
     return {
       obj: request,
@@ -30,7 +28,6 @@ export class RelationService {
 
   async accept(id: string) {
     const invite = await this.inviteRepository.edit(id, { pending: false });
-    
     return invite;
   }
 

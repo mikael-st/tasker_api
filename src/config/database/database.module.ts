@@ -10,9 +10,12 @@ import { SequelizeModule } from "@nestjs/sequelize";
     SequelizeModule.forRoot({
       dialect: 'postgres',
       uri: DB_URL,
-      models: [ User, Invite, Project ],
-      autoLoadModels: true,
-      synchronize: true
+      models: [
+        User,
+        Invite,
+        Project,
+      ],
+      autoLoadModels: true
     })
   ]
 })

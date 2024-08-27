@@ -63,7 +63,7 @@ export class UserRepository {
           {
             model: Invite,
             as: 'invites'
-          }
+          },
         ]
       });
 
@@ -77,8 +77,26 @@ export class UserRepository {
     }
   }
 
-  async edit(id: string, update: any): Promise<any> {
-    return 'to-do';
+  async edit(username: string, update: any): Promise<any> {
+    try {
+      const response = await this.Users.update(
+        update,
+        {
+          where: {
+            username: username
+          },
+          returning: true
+        },
+      );
+      
+      return {
+        data: response,
+        error: false,
+        message: "CHANGED"
+      } as Result;
+    } catch (err) {
+      throw new BadRequestException(err);
+    }
   }
 
   async delete(key: string): Promise<any> {

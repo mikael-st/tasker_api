@@ -8,6 +8,7 @@
   "scripts": {
     "migrate:generate": "npx sequelize-cli migration:generate --name",
     "migrate": "npx sequelize-cli db:migrate",
+    "migrate:undo": "npx sequelize-cli db:migrate:undo --name",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",

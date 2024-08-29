@@ -66,12 +66,8 @@ export class UserRepository {
             as: 'invites'
           },
           {
-            model: Relation,
+            model: User,
             as: 'relations'
-          },
-          {
-            model: Relation,
-            as: 'related'
           }
         ]
       });

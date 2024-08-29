@@ -1,4 +1,4 @@
-import { Column, DataType, HasMany, Table, Model } from "sequelize-typescript";
+import { Column, DataType, HasMany, Table, Model, BelongsToMany } from "sequelize-typescript";
 import { Invite } from "./invite.model";
 import { Project } from "./project.model";
 import { Relation } from "./relation.model";
@@ -50,11 +50,14 @@ export class User extends Model {
   @HasMany(() => Invite, 'sender' && 'receiver')
   invites: Invite[];
 
-  @HasMany(() => Relation, 'user')
-  relations: Relation[];
+  @BelongsToMany(() => User, () => Relation, 'user', 'related')
+  relations: User[];
 
-  @HasMany(() => Relation, 'related')
-  related: Relation[];
+  // @HasMany(() => Relation, 'user')
+  // relations: Relation[];
+
+  // @HasMany(() => Relation, 'related')
+  // related: Relation[];
 
   @HasMany(() => Project, 'owner')
   projects: Project[];

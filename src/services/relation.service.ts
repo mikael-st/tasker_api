@@ -1,4 +1,5 @@
-import { Injectable } from "@nestjs/common";
+import { Result } from "@interfaces/Response";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { InvitesRepository, SendInvitesDTO } from "@repositories/invites.repository";
 import { RelationRepository } from "@repositories/relation.repository";
 
@@ -29,17 +30,22 @@ export class RelationService {
   }
 
   async accept(id: string) {
-    const invite = (await this.inviteRepository.edit(id, { pending: false })).data[1][0].dataValues;
+    const result = (await this.inviteRepository.edit(id, { pending: false }));
 
-    console.log('INVITE: ', invite);
-    
-
-    const result = await this.relationRepository.create({
-      user: invite.sender,
-      related: invite.receiver
-    });
-
-    return result;
+    if (result.data[0] === 0) {
+      throw new NotFoundException("INVITE NOT FOUND");
+    } else {
+      const invite = result.data[1][0];
+      const relation = await this.relationRepository.create({
+        user: invite.sender,
+        related: invite.receiver
+      });
+      return {
+        data: relation,
+        error: false,
+        message: `RELATION BETWEEN ${relation.user} AND ${relation.related} MADE`
+      } as Result;
+    }
   }
 
   async del(id: string) {

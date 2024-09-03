@@ -3,7 +3,7 @@ import { Invite } from "@models/invite.model";
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { Result } from "@interfaces/Response";
 import { InjectModel } from "@nestjs/sequelize";
-import { Op, where } from "sequelize";
+import { Op } from "sequelize";
 import { Repository } from "@interfaces/Repository";
 
 export type SendInvitesDTO = {

@@ -2,6 +2,7 @@ import { Column, DataType, HasMany, Table, Model, BelongsToMany } from "sequeliz
 import { Invite } from "./invite.model";
 import { Project } from "./project.model";
 import { Relation } from "./relation.model";
+import { Task } from "./task.model";
 
 @Table
 export class User extends Model {
@@ -55,4 +56,7 @@ export class User extends Model {
 
   @HasMany(() => Project, 'owner')
   projects: Project[];
+
+  @HasMany(() => Task, 'owner')
+  tasks: Task[];
 }

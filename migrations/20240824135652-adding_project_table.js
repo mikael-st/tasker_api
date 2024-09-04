@@ -17,6 +17,10 @@ module.exports = {
         type: DataType.STRING,
         allowNull: false
       },
+      description: {
+        type: DataType.STRING,
+        allowNull: false
+      },
       owner: {
         type: DataType.STRING,
         allowNull: false,
@@ -24,6 +28,20 @@ module.exports = {
           model: 'Users',
           key: 'username'
         }
+      },
+      progress: {
+        type: DataType.ENUM(
+          'PENDING',
+          'IN_PROGRESS',
+          'PAUSED',
+          'COMPLETED'
+        ),
+        defaultValue: 'PENDING',
+        allowNull: false
+      },
+      due_date: {
+        type: DataType.DATE,
+        allowNull: false
       },
       createdAt: {
         type: Sequelize.DATE,

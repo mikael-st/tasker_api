@@ -1,4 +1,4 @@
-export interface CreateProjectDTO {
+export type CreateProjectDTO = {
   title: string;
   description: string;
   owner: string;

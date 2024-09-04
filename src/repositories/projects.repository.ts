@@ -1,77 +1,84 @@
-// import { ProjectNotExistsException } from "@exceptions/project_not_exists.exception";
-// import { Repository } from "@interfaces/Repository";
-// import { Project } from "@models/project.model";
-// import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
-// import { CreateProjectDTO } from "src/DTO/create_project.dto";
+import { ProjectNotExistsException } from "@exceptions/project_not_exists.exception";
+import { Repository } from "@interfaces/Repository";
+import { Result } from "@interfaces/Response";
+import { Project } from "@models/project.model";
+import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
+import { InjectModel } from "@nestjs/sequelize";
+import { CreateProjectDTO } from "src/DTO/create_project.dto";
 
-// @Injectable()
-// export class ProjectRepository implements Repository {
-//   constructor (
-//     @InjectModel('Project') private readonly Projects: Model<Project>
-//   ) {}
+@Injectable()
+export class ProjectRepository {
+  constructor (
+    @InjectModel(Project) private readonly Projects: typeof Project
+  ) {}
   
-//   async create(data: CreateProjectDTO) {
-//     const project = new this.Projects({
-//       title: data.title,
-//       description: data.description,
-//       owner: data.owner
-//     });
+  async create(data: CreateProjectDTO) {
+    try {
+      await this.Projects.create(
+        {
+          title: data.title,
+          description: data.description,
+          owner: data.owner,
+          due_date: data.due_date
+        }
+      );
 
-//     // console.log(project);
+      return 'CREATED WITH SUCCESS';
+    } catch (err) {
+      throw new BadRequestException(err);
+    }
+  };
 
-//     try {
-//       await project.save();
-
-//       return 'CREATED WITH SUCCESS'
-//     } catch (err) {
-//       throw new BadRequestException(err);
-//     }
-//   };
-
-//   async list() {  
-//     try {
-//       const projects = await this.Projects
-//                           .find()
-//                           .populate('owner')
-//                           .populate('members')
-//                           .exec();
-//       return projects;
-//     } catch (err) {
-//       throw new BadRequestException(err);
-//     }
-//   };
+  async list() {  
+    try {
+      const projects = await this.Projects.findAll();
+      return projects;
+    } catch (err) {
+      throw new BadRequestException(err);
+    }
+  };
   
-//   async find(key: string) {
-//     try {
-//       const projects = await this.Projects
-//                           .findOne()
-//                           .where('_id')
-//                           .equals(key)
-//                           .populate('owner')
-//                           .populate('members')
-//                           .exec();
+  async find(key: string) {
+    try {
+      const projects = await this.Projects.findOne({
+        where: {
+          id: key
+        }
+      })
 
-//       if (!projects) {
-//         throw new ProjectNotExistsException();
-//       }
+      if (!projects) {
+        throw new ProjectNotExistsException();
+      }
 
-//       return projects;
-//     } catch (err) {
-//       throw new BadRequestException(err);
-//     }
-//   };
+      return projects;
+    } catch (err) {
+      throw new BadRequestException(err);
+    }
+  };
 
-//   async edit(data: any) {};
+  async edit(data: any) {};
   
-//   async delete(id: string) {
-//     console.log('hi from repository');
+  async delete(id: string) {
+    console.log('hi from repository');
     
-//     try {
-//       const response = await this.Projects.deleteOne().where('_id').equals(id);
-      
-//       return 'DELETED WITH SUCCESS';
-//     } catch (err) {
-//       throw new BadRequestException(err);
-//     }
-//   };
-// }
+    try {
+      const response = await this.Projects.destroy({
+        where: {
+          id: id
+        }
+      });
+    
+      if (!response) {
+        throw new NotFoundException();
+      }
+
+      return {
+        data: response,
+        error: false,
+        message: 'REMOVED'
+      } as Result;
+    } catch (err) {
+      throw new BadRequestException(err);
+    }
+  };
+}

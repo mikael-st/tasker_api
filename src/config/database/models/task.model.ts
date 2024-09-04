@@ -41,7 +41,7 @@ export class Task extends Model {
   description: string;
 
   @Column({
-    type: DataType.STRING,
+    type: DataType.UUID,
     allowNull: false,
     references: {
       model: Project,
@@ -62,6 +62,7 @@ export class Task extends Model {
 
   @Column({
     type: DataType.ENUM(...Object.values(TaskStage)),
+    defaultValue: TaskStage.PENDING,
     allowNull: false
   })
   stage: TaskStage;

@@ -5,7 +5,7 @@ const { DataType } = require('sequelize-typescript');
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await queryInterface.createTable('Projects', {
+    await queryInterface.createTable('Task', {
       id: {
         type: DataType.UUID,
         defaultValue: DataType.UUIDV4,
@@ -13,13 +13,24 @@ module.exports = {
         unique: true,
         primaryKey: true
       },
-      title: {
+      name: {
         type: DataType.STRING,
-        allowNull: false
+        allowNull: false,
+        unique: true,
       },
       description: {
         type: DataType.STRING,
-        allowNull: false
+        allowNull: false,
+      },
+      project: {
+        type: DataType.UUID,
+        allowNull: false,
+        references: {
+          model: 'Projects',
+          key: 'id'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
       },
       owner: {
         type: DataType.STRING,
@@ -31,14 +42,24 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
       },
-      progress: {
+      stage: {
         type: DataType.ENUM(
           'PENDING',
           'IN_PROGRESS',
-          'PAUSED',
-          'COMPLETED'
+          'REVIEW',
+          'DONE'
         ),
         defaultValue: 'PENDING',
+        allowNull: false
+      },
+      priority: {
+        type: DataType.ENUM(
+          'LOW',
+          'MEDIUM',
+          'HIGH',
+          'EXTREME'
+        ),
+        defaultValue: 'LOW',
         allowNull: false
       },
       due_date: {
@@ -59,6 +80,6 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    await queryInterface.dropTable('Projects')
+    await queryInterface.dropTable('Task');
   }
 };

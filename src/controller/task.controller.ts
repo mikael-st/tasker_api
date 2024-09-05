@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Query } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Put, Query } from "@nestjs/common";
 import { TasksRepository } from "@repositories/tasks.repository";
 import { TaskCreateDTO } from "src/DTO/task.create.dto";
 import { TaskListDTO } from "src/DTO/task.dto";
@@ -16,18 +16,34 @@ export class TasksController {
     return await this.repository.create(data);
   }
 
-  @Get('/:project')
+  @Get()
   async list(
-    @Param('project') project: string,
     @Query() queries: TaskListDTO
   ) {
-    return await this.repository.list(project);
+    console.log(queries);
+    
+    return await this.repository.list(queries);
   }
 
-  @Get()
+  @Get('/:code')
   async find(
-    @Query() queries: any
+    @Param('code') code: string
   ) {
-    return await this.repository.find(queries);
+    return await this.repository.find(code);
+  }
+
+  @Put('/:code')
+  async update(
+    @Param('code') code: string,
+    @Body()        update: any
+  ) {
+    return await this.repository.edit(code, update);
+  }
+
+  @Delete('/:id')
+  async delete(
+    @Param('id') id: string,
+  ) {
+    return await this.repository.delete(id);
   }
 }

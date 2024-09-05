@@ -1,10 +1,10 @@
-import { Project } from "@models/project.model";
 import { TaskPriority, TaskStage } from "@models/task.model";
-import { User } from "@models/user.model";
 
 export type TaskListDTO = {
+  code?: string;
   name?: string;
-  owner?: User;
+  project?: string;
+  owner?: string;
   stage?: TaskStage;
   priority?: TaskPriority;
   due_date?: Date;

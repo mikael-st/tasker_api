@@ -3,6 +3,7 @@ import { Task } from "@models/task.model";
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/sequelize";
 import { TaskCreateDTO } from "src/DTO/task.create.dto";
+import { TaskListDTO } from "src/DTO/task.dto";
 
 @Injectable()
 export class TasksRepository {
@@ -34,12 +35,10 @@ export class TasksRepository {
     }
   }
 
-  async list(project_id: string) {
+  async list(queries: TaskListDTO) {
     try {
       const tasks = await this.Tasks.findAll({
-        where: {
-          project: project_id
-        }
+        where: queries
       });
 
       return tasks;
@@ -48,11 +47,11 @@ export class TasksRepository {
     }
   }
 
-  async find(queries: {[ key: string ]: string}) {
+  async find(code: string) {
     try {
       const task = await this.Tasks.findOne({
         where: {
-          queries
+          code: code
         }
       });
 
@@ -66,13 +65,13 @@ export class TasksRepository {
     }
   }
 
-  async edit(id: string, update: any): Promise<any> {
+  async edit(code: string, update: any): Promise<any> {
     try {
       const response = await this.Tasks.update(
         update,
         {
           where: {
-            id: id
+            code: code
           },
           returning: true
         },

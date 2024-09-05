@@ -20,7 +20,7 @@ import { SequelizeModule } from "@nestjs/sequelize";
         Task
       ],
       autoLoadModels: true,
-      synchronize: true,
+      // synchronize: true,
     })
   ]
 })

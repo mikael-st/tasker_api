@@ -41,7 +41,7 @@ export class Project extends Model {
       key: 'username'
     }
   })
-  owner: string;
+  owner: User;
 
   @Column({
     type: DataType.ENUM(...Object.values(ProjectProgress)),

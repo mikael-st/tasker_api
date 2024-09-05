@@ -6,6 +6,7 @@ import { User } from "@models/user.model";
 import { Result } from "@interfaces/Response";
 import { InjectModel } from "@nestjs/sequelize";
 import { Invite } from "@models/invite.model";
+import { Project } from "@models/project.model";
 
 @Injectable()
 export class UserRepository {
@@ -63,6 +64,10 @@ export class UserRepository {
           {
             model: Invite,
             as: 'invites'
+          },
+          {
+            model: Project,
+            as: 'projects'
           },
           {
             model: User,

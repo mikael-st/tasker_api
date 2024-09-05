@@ -23,9 +23,16 @@ export class Task extends Model {
     defaultValue: DataType.UUIDV4,
     allowNull: false,
     unique: true,
-    primaryKey: true
   })
   id: string;
+
+  @Column({
+    type: DataType.STRING,
+    allowNull: false,
+    unique: true,
+    primaryKey: true
+  })
+  code: string;
 
   @Column({
     type: DataType.STRING,

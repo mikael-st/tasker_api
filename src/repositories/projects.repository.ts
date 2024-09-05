@@ -2,6 +2,8 @@ import { ProjectNotExistsException } from "@exceptions/project_not_exists.except
 import { Repository } from "@interfaces/Repository";
 import { Result } from "@interfaces/Response";
 import { Project } from "@models/project.model";
+import { Task } from "@models/task.model";
+import { User } from "@models/user.model";
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/sequelize";
 import { CreateProjectDTO } from "src/DTO/create_project.dto";
@@ -43,7 +45,17 @@ export class ProjectRepository {
       const projects = await this.Projects.findOne({
         where: {
           id: key
-        }
+        },
+        include: [
+          // {
+          //   model: User,
+          //   as: 'owner'
+          // },
+          {
+            model: Task,
+            as: 'tasks'
+          },
+        ]
       })
 
       if (!projects) {

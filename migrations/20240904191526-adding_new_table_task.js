@@ -5,10 +5,15 @@ const { DataType } = require('sequelize-typescript');
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await queryInterface.createTable('Task', {
+    await queryInterface.createTable('Tasks', {
       id: {
         type: DataType.UUID,
         defaultValue: DataType.UUIDV4,
+        allowNull: false,
+        unique: true,
+      },
+      code: {
+        type: DataType.STRING,
         allowNull: false,
         unique: true,
         primaryKey: true
@@ -17,10 +22,12 @@ module.exports = {
         type: DataType.STRING,
         allowNull: false,
         unique: true,
+        defaultValue: ""
       },
       description: {
         type: DataType.STRING,
         allowNull: false,
+        defaultValue: ""
       },
       project: {
         type: DataType.UUID,
@@ -80,6 +87,6 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    await queryInterface.dropTable('Task');
+    await queryInterface.dropTable('Tasks');
   }
 };

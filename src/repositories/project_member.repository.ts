@@ -5,11 +5,11 @@ import { InjectModel } from "@nestjs/sequelize";
 export type DefineProjectMember = {
   user: string,
   project: string,
-  role: MemberRole
+  role?: MemberRole
 }
 
 @Injectable()
-export class name {
+export class ProjectMemberRepository {
   constructor(
     @InjectModel(ProjectMember) private readonly ProjectMembers: typeof ProjectMember
   ) {}
@@ -17,8 +17,12 @@ export class name {
   async create(data: DefineProjectMember) {
     try {
       const result = await this.ProjectMembers.create({
+        user: data.user,
+        project: data.project,
+        role: data.role
+      });
 
-      })
+      return result;
     } catch (err) {
       throw new BadRequestException(err);
     }

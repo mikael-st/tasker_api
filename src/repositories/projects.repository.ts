@@ -15,7 +15,7 @@ export class ProjectRepository {
   
   async create(data: CreateProjectDTO) {
     try {
-      await this.Projects.create(
+      const result = await this.Projects.create(
         {
           title: data.title,
           description: data.description,
@@ -24,7 +24,11 @@ export class ProjectRepository {
         }
       );
 
-      return 'CREATED WITH SUCCESS';
+      return {
+        data: result,
+        error: false,
+        message: 'CREATED WITH SUCCESS'
+      } as Result;
     } catch (err) {
       throw new BadRequestException(err);
     }

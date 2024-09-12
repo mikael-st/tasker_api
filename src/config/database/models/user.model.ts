@@ -3,6 +3,7 @@ import { Invite } from "./invite.model";
 import { Project } from "./project.model";
 import { Relation } from "./relation.model";
 import { Task } from "./task.model";
+import { ProjectMember } from "./project_member.model";
 
 @Table
 export class User extends Model {
@@ -52,11 +53,14 @@ export class User extends Model {
   invites: Invite[];
 
   @BelongsToMany(() => User, () => Relation, 'user', 'related')
-  relations: Relation[];
+  relations: User[];
 
   @HasMany(() => Project, 'owner')
   projects: Project[];
 
   @HasMany(() => Task, 'owner')
   tasks: Task[];
+
+  @HasMany(() => ProjectMember, 'user')
+  member: ProjectMember[];
 }

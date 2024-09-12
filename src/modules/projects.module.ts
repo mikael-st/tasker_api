@@ -1,4 +1,6 @@
 import { Project } from "@models/project.model";
+import { ProjectInvite } from "@models/project_invite.model";
+import { ProjectMember } from "@models/project_member.model";
 import { Task } from "@models/task.model";
 import { Module } from "@nestjs/common";
 import { SequelizeModule } from "@nestjs/sequelize";
@@ -9,7 +11,12 @@ import { ProjectRepository } from "src/repositories/projects.repository";
 
 @Module({
   imports: [
-    SequelizeModule.forFeature([ Project, Task ]),
+    SequelizeModule.forFeature([
+      Project,
+      Task,
+      ProjectMember,
+      ProjectInvite
+    ]),
   ],
   controllers: [ ProjectController, TasksController ],
   providers: [ ProjectRepository, TasksRepository ]

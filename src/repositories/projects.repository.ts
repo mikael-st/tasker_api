@@ -1,9 +1,8 @@
 import { ProjectNotExistsException } from "@exceptions/project_not_exists.exception";
-import { Repository } from "@interfaces/Repository";
 import { Result } from "@interfaces/Response";
 import { Project } from "@models/project.model";
+import { ProjectMember } from "@models/project_member.model";
 import { Task } from "@models/task.model";
-import { User } from "@models/user.model";
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/sequelize";
 import { CreateProjectDTO } from "src/DTO/create_project.dto";
@@ -47,13 +46,12 @@ export class ProjectRepository {
           id: key
         },
         include: [
-          // {
-          //   model: User,
-          //   as: 'owner'
-          // },
           {
             model: Task,
             as: 'tasks'
+          },{
+            model: ProjectMember,
+            as: 'members'
           },
         ]
       })
@@ -71,8 +69,6 @@ export class ProjectRepository {
   async edit(data: any) {};
   
   async delete(id: string) {
-    console.log('hi from repository');
-    
     try {
       const response = await this.Projects.destroy({
         where: {

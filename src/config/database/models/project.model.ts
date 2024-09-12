@@ -1,6 +1,8 @@
+import { ProjectInvite } from "./project_invite.model";
+import { ProjectMember } from "./project_member.model";
 import { Task } from "./task.model";
 import { User } from "./user.model";
-import { Model, Column, DataType, ForeignKey, Table, AllowNull, HasMany } from "sequelize-typescript";
+import { Model, Column, DataType, ForeignKey, Table, HasMany } from "sequelize-typescript";
 
 export enum ProjectProgress {
   PENDING = 'PENDING',
@@ -56,8 +58,11 @@ export class Project extends Model {
   })
   due_date: Date;
 
-  @HasMany(() => User, 'username')
-  members: User[];
+  @HasMany(() => ProjectMember, 'project')
+  members: ProjectMember[];
+
+  // @HasMany(() => ProjectInvite, 'project')
+  // invites: ProjectInvite[];
 
   @HasMany(() => Task, 'project')
   tasks: Task[]

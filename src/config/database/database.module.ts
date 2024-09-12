@@ -1,6 +1,8 @@
 import { DB_URL } from "@config/env.config";
 import { Invite } from "@models/invite.model";
-import { Project, ProjectProgress } from "@models/project.model";
+import { Project } from "@models/project.model";
+import { ProjectInvite } from "@models/project_invite.model";
+import { ProjectMember } from "@models/project_member.model";
 import { Relation } from "@models/relation.model";
 import { Task } from "@models/task.model";
 import { User } from "@models/user.model";
@@ -16,11 +18,12 @@ import { SequelizeModule } from "@nestjs/sequelize";
         User,
         Invite,
         Project,
+        ProjectMember,
+        ProjectInvite,
         Relation,
         Task
       ],
       autoLoadModels: true,
-      // synchronize: true,
     })
   ]
 })

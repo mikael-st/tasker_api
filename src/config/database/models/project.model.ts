@@ -1,3 +1,4 @@
+import { Checkpoint } from "./checkpoint.model";
 import { ProjectInvite } from "./project_invite.model";
 import { ProjectMember } from "./project_member.model";
 import { Task } from "./task.model";
@@ -67,6 +68,6 @@ export class Project extends Model {
   @HasMany(() => Task, 'project')
   tasks: Task[]
 
-  // @HasMany(() => CheckPoint, 'id')
-  // checkpoints: CheckPoint[]
+  @HasMany(() => Checkpoint, 'project')
+  checkpoints: Checkpoint[];
 }

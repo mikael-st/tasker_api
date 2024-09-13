@@ -2,7 +2,6 @@ import { Column, DataType, HasMany, Table, Model, BelongsToMany } from "sequeliz
 import { Invite } from "./invite.model";
 import { Project } from "./project.model";
 import { Relation } from "./relation.model";
-import { Task } from "./task.model";
 import { ProjectMember } from "./project_member.model";
 
 @Table

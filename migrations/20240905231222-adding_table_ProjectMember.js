@@ -5,7 +5,7 @@ const { DataType } = require('sequelize-typescript');
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await queryInterface.createTable('ProjectMember', {
+    await queryInterface.createTable('ProjectMembers', {
       id: {
         type: DataType.UUID,
         defaultValue: DataType.UUIDV4,
@@ -56,6 +56,6 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    await queryInterface.dropTable('ProjectMember');
+    await queryInterface.dropTable('ProjectMembers');
   }
 };

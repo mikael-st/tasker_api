@@ -1,6 +1,7 @@
-import { Column, DataType, ForeignKey, Model, Table } from "sequelize-typescript";
+import { Column, DataType, ForeignKey, HasMany, Model, Table } from "sequelize-typescript";
 import { Project } from "./project.model";
 import { User } from "./user.model";
+import { Task } from "./task.model";
 
 export enum MemberRole {
   OWNER = 'OWNER',
@@ -47,4 +48,7 @@ export class ProjectMember extends Model {
     allowNull: false
   })
   role: MemberRole;
+
+  @HasMany(() => Task, 'owner')
+  tasks: Task[];
 }

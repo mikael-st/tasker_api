@@ -1,6 +1,7 @@
 import { BelongsTo, Column, DataType, Model, Table } from "sequelize-typescript";
 import { User } from "./user.model";
 import { Project } from "./project.model";
+import { ProjectMember } from "./project_member.model";
 
 export enum TaskStage {
   PENDING = 'PENDING',
@@ -58,14 +59,14 @@ export class Task extends Model {
   project: Project;
 
   @Column({
-    type: DataType.STRING,
+    type: DataType.UUID,
     allowNull: false,
     references: {
-      model: User,
-      key: 'username'
+      model: ProjectMember,
+      key: 'id'
     }
   })
-  owner: User;
+  owner: string;
 
   @Column({
     type: DataType.ENUM(...Object.values(TaskStage)),

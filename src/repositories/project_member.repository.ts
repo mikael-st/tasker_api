@@ -1,5 +1,6 @@
+import { Result } from "@interfaces/Response";
 import { MemberRole, ProjectMember } from "@models/project_member.model";
-import { BadRequestException, Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/sequelize";
 
 export type DefineProjectMember = {
@@ -23,6 +24,28 @@ export class ProjectMemberRepository {
       });
 
       return result;
+    } catch (err) {
+      throw new BadRequestException(err);
+    }
+  }
+
+  async delete(id: string) {
+    try {
+      const result = await this.ProjectMembers.destroy({
+        where: {
+          id: id
+        }
+      });
+
+      if (!result) {
+        throw new NotFoundException();
+      }
+
+      return {
+        data: result,
+        error: false,
+        message: 'REMOVED WITH SUCCESS'
+      } as Result;
     } catch (err) {
       throw new BadRequestException(err);
     }

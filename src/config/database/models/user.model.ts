@@ -58,9 +58,6 @@ export class User extends Model {
   @HasMany(() => Project, 'owner')
   projects: Project[];
 
-  @HasMany(() => Task, 'owner')
-  tasks: Task[];
-
   @HasMany(() => ProjectMember, 'user')
   member: ProjectMember[];
 }

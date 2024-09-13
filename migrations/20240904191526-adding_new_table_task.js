@@ -40,11 +40,11 @@ module.exports = {
         onDelete: 'CASCADE'
       },
       owner: {
-        type: DataType.STRING,
+        type: DataType.UUID,
         allowNull: false,
         references: {
-          model: 'Users',
-          key: 'username'
+          model: 'ProjectMembers',
+          key: 'id'
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'

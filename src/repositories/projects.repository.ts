@@ -1,11 +1,12 @@
 import { ProjectNotExistsException } from "@exceptions/project_not_exists.exception";
 import { Result } from "@interfaces/Response";
+import { Checkpoint } from "@models/checkpoint.model";
 import { Project } from "@models/project.model";
 import { ProjectMember } from "@models/project_member.model";
 import { Task } from "@models/task.model";
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/sequelize";
-import { CreateProjectDTO } from "src/DTO/create_project.dto";
+import { CreateProjectDTO } from "src/DTO/project.create.dto";
 
 @Injectable()
 export class ProjectRepository {
@@ -56,6 +57,9 @@ export class ProjectRepository {
           },{
             model: ProjectMember,
             as: 'members'
+          },{
+            model: Checkpoint,
+            as: 'checkpoints'
           },
         ]
       })

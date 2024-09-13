@@ -8,13 +8,22 @@ export class Checkpoint extends Model {
     defaultValue: DataType.UUIDV4,
     allowNull: false,
     unique: true,
-    primaryKey: true
+    // primaryKey: true
   })
   id: string;
 
   @Column({
     type: DataType.STRING,
     allowNull: false
+  
+  })
+  title: string;
+
+  @Column({
+    type: DataType.STRING,
+    allowNull: false,
+    unique: true,
+    primaryKey: true
   })
   tag: string;
 

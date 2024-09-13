@@ -13,13 +13,7 @@ export class CheckpointsRepository {
 
   async create(data: CheckpointCreateDTO) {
     try {
-      const checkpoint = await this.Checkpoints.create(
-        {
-          tag: data.tag,
-          date: data.date,
-          project: data.project
-        }
-      );
+      const checkpoint = await this.Checkpoints.create(data);
 
       return {
         data: checkpoint,

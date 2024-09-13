@@ -11,11 +11,17 @@ module.exports = {
         defaultValue: DataType.UUIDV4,
         allowNull: false,
         unique: true,
-        primaryKey: true
+        // primaryKey: true
       },
       tag: {
         type: DataType.STRING,
-        allowNull: false
+        allowNull: false,
+        unique: true,
+        primaryKey: true
+      },
+      title: {
+        type: DataType.STRING,
+        allowNull: false,
       },
       project: {
         type: DataType.UUID,

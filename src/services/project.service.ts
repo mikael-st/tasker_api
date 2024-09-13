@@ -2,7 +2,7 @@ import { MemberRole } from "@models/project_member.model";
 import { Injectable } from "@nestjs/common";
 import { ProjectMemberRepository } from "@repositories/project_member.repository";
 import { ProjectRepository } from "@repositories/projects.repository";
-import { CreateProjectDTO } from "src/DTO/create_project.dto";
+import { CreateProjectDTO } from "src/DTO/project.create.dto";
 
 @Injectable()
 export class ProjectService {
